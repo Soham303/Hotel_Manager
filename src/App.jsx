@@ -5,7 +5,8 @@ import KPISummary from './components/KPISummary';
 import FloorPlanGrid from './components/FloorPlanGrid';
 import AlertsDispatch from './components/AlertsDispatch';
 import PeakHourAnalytics from './components/PeakHourAnalytics';
-import { Camera, LayoutGrid, Bell, BarChart3, ShieldCheck, Sparkles, Volume2, VolumeX } from 'lucide-react';
+import CameraConfigCalibration from './components/CameraConfigCalibration';
+import { Camera, LayoutGrid, Bell, BarChart3, Settings2, Sparkles, Volume2, VolumeX } from 'lucide-react';
 
 function Dashboard() {
   const [activeTab, setActiveTab] = useState('live');
@@ -56,6 +57,12 @@ function Dashboard() {
           >
             <BarChart3 size={16} /> Peak Hour Scheduling
           </button>
+          <button 
+            className={`nav-tab ${activeTab === 'calibration' ? 'active' : ''}`}
+            onClick={() => setActiveTab('calibration')}
+          >
+            <Settings2 size={16} /> Camera Calibration
+          </button>
         </nav>
 
         <div className="nav-right">
@@ -103,6 +110,10 @@ function Dashboard() {
 
         {activeTab === 'analytics' && (
           <PeakHourAnalytics />
+        )}
+
+        {activeTab === 'calibration' && (
+          <CameraConfigCalibration />
         )}
       </main>
     </div>
