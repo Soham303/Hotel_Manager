@@ -1,12 +1,19 @@
 import React, { useState } from 'react';
-import { Camera, LayoutGrid, Bell, BarChart3, Settings } from 'lucide-react';
+import { RestaurantProvider, useRestaurant } from './context/RestaurantContext';
+import CCTVFeed from './components/CCTVFeed';
+import KPISummary from './components/KPISummary';
+import FloorPlanGrid from './components/FloorPlanGrid';
+import { Camera, LayoutGrid, Bell, BarChart3, ShieldCheck, Sparkles, Volume2, VolumeX } from 'lucide-react';
 
-export default function App() {
+function Dashboard() {
   const [activeTab, setActiveTab] = useState('live');
+  const { alerts, stats, soundEnabled, setSoundEnabled } = useRestaurant();
+
+  const unresolvedAlertsCount = alerts.filter(a => !a.resolved).length;
 
   return (
     <div className="app-container">
-      {/* Navigation Bar */}
+      {/* Top Navigation Bar */}
       <header className="navbar">
         <div className="brand">
           <div className="brand-logo">
@@ -14,7 +21,7 @@ export default function App() {
           </div>
           <div className="brand-text">
             <h1>RestoVision AI</h1>
-            <p>Smart Dining Floor Monitor</p>
+            <p>Computer Vision Dining Floor Intelligence</p>
           </div>
         </div>
 
@@ -29,13 +36,17 @@ export default function App() {
             className={`nav-tab ${activeTab === 'floor' ? 'active' : ''}`}
             onClick={() => setActiveTab('floor')}
           >
-            <LayoutGrid size={16} /> Floor Plan
+            <LayoutGrid size={16} /> Floor Plan ({stats.totalTables})
           </button>
           <button 
             className={`nav-tab ${activeTab === 'alerts' ? 'active' : ''}`}
             onClick={() => setActiveTab('alerts')}
+            style={{ position: 'relative' }}
           >
             <Bell size={16} /> Dispatch Alerts
+            {unresolvedAlertsCount > 0 && (
+              <span className="badge-counter">{unresolvedAlertsCount}</span>
+            )}
           </button>
           <button 
             className={`nav-tab ${activeTab === 'analytics' ? 'active' : ''}`}
@@ -46,16 +57,54 @@ export default function App() {
         </nav>
 
         <div className="nav-right">
+          <button
+            className="icon-btn"
+            onClick={() => setSoundEnabled(!soundEnabled)}
+            title={soundEnabled ? 'Mute Alert Audio' : 'Unmute Alert Audio'}
+          >
+            {soundEnabled ? <Volume2 size={16} color="#10b981" /> : <VolumeX size={16} />}
+          </button>
+
           <div className="live-indicator">
             <span className="live-dot"></span>
-            <span>LIVE CAM 01</span>
+            <span>LIVE CAM 04</span>
           </div>
         </div>
       </header>
 
+      {/* Main Content Area */}
       <main className="dashboard-main">
-        <p style={{ color: 'var(--text-secondary)' }}>System initialized.</p>
+        {/* KPI Summary Banner */}
+        <KPISummary />
+
+        {/* View Selection */}
+        {activeTab === 'live' && (
+          <div className="content-grid">
+            <CCTVFeed />
+            <FloorPlanGrid />
+          </div>
+        )}
+
+        {activeTab === 'floor' && (
+          <FloorPlanGrid />
+        )}
+
+        {activeTab === 'alerts' && (
+          <div style={{ color: 'var(--text-secondary)' }}>Dispatch Alerts Panel loading...</div>
+        )}
+
+        {activeTab === 'analytics' && (
+          <div style={{ color: 'var(--text-secondary)' }}>Analytics section loading...</div>
+        )}
       </main>
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <RestaurantProvider>
+      <Dashboard />
+    </RestaurantProvider>
   );
 }
