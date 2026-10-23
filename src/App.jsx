@@ -3,6 +3,7 @@ import { RestaurantProvider, useRestaurant } from './context/RestaurantContext';
 import CCTVFeed from './components/CCTVFeed';
 import KPISummary from './components/KPISummary';
 import FloorPlanGrid from './components/FloorPlanGrid';
+import AlertsDispatch from './components/AlertsDispatch';
 import { Camera, LayoutGrid, Bell, BarChart3, ShieldCheck, Sparkles, Volume2, VolumeX } from 'lucide-react';
 
 function Dashboard() {
@@ -81,7 +82,10 @@ function Dashboard() {
         {activeTab === 'live' && (
           <div className="content-grid">
             <CCTVFeed />
-            <FloorPlanGrid />
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+              <FloorPlanGrid />
+              <AlertsDispatch />
+            </div>
           </div>
         )}
 
@@ -90,7 +94,10 @@ function Dashboard() {
         )}
 
         {activeTab === 'alerts' && (
-          <div style={{ color: 'var(--text-secondary)' }}>Dispatch Alerts Panel loading...</div>
+          <div className="content-grid" style={{ gridTemplateColumns: '1.5fr 1fr' }}>
+            <AlertsDispatch />
+            <FloorPlanGrid />
+          </div>
         )}
 
         {activeTab === 'analytics' && (
