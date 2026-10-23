@@ -4,6 +4,7 @@ import CCTVFeed from './components/CCTVFeed';
 import KPISummary from './components/KPISummary';
 import FloorPlanGrid from './components/FloorPlanGrid';
 import AlertsDispatch from './components/AlertsDispatch';
+import PeakHourAnalytics from './components/PeakHourAnalytics';
 import { Camera, LayoutGrid, Bell, BarChart3, ShieldCheck, Sparkles, Volume2, VolumeX } from 'lucide-react';
 
 function Dashboard() {
@@ -101,7 +102,7 @@ function Dashboard() {
         )}
 
         {activeTab === 'analytics' && (
-          <div style={{ color: 'var(--text-secondary)' }}>Analytics section loading...</div>
+          <PeakHourAnalytics />
         )}
       </main>
     </div>
